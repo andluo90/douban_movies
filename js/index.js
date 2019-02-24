@@ -6,36 +6,55 @@ $('footer>div').click(function(){
 })
 
 let moive_index = 0;
+let is_lodding = false;
 
 function get_movies_data(){
-    $.ajax({
-        url:'//api.douban.com/v2/movie/top250',
-        type:'GET',
-        dataType:'jsonp',
-        data: {
-            start:moive_index,
-            count:20
-        }
-        
-    }).done(function(res){
-        console.log('请求电影数据成功:')
-        setData(res)
-        moive_index += 20
-        console.log(res)
-    }).fail(function(res){
-        console.log('请求电影数据失败: ')
-        console.log(res)    
-    })
+    if(is_lodding){
+        console.log('lodding中，不重新请求数据')
+        return
+    }else{
+        is_lodding = true
+        $('.loading').show()
+        $.ajax({
+            url:'//api.douban.com/v2/movie/top250',
+            type:'GET',
+            dataType:'jsonp',
+            data: {
+                start:moive_index,
+                count:20
+            }
+            
+        }).done(function(res){
+            console.log('请求电影数据成功:')
+            setData(res)
+            moive_index += 20
+            console.log(res)
+        }).fail(function(res){
+            console.log('请求电影数据失败: ')
+            console.log(res)    
+        }).always(function(){
+            is_lodding = false
+            $('.loading').hide()
+
+        })
+    }
 }
 
 get_movies_data()
 
+let clock = null
 
 $('main').scroll(function(){
-    if($('section').eq(0).height() - 50 <= $('main').height()+$('main').scrollTop()){
-        console.log("滚动到底部，发起新的请求")
-        get_movies_data(moive_index)
+    if(clock){
+        clearTimeout(clock)
     }
+    clock = setTimeout(function(){
+        if($('section').eq(0).height() - 50 <= $('main').height()+$('main').scrollTop()){
+            console.log("滚动到底部，发起新的请求")
+            get_movies_data(moive_index)
+        }
+    },300)
+    
 })
 
 function setData(data){
@@ -69,6 +88,6 @@ function setData(data){
     </div>
 `
          $node = $(tmp)
-         $('section').eq(0).append($node)
+         $('#top250').append($node)
     })
 }
