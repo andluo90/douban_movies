@@ -24,6 +24,7 @@ main {
 }
 
 main > section {
+    padding:10px;
     display: none;
 }
 main > section:first-child {
@@ -76,6 +77,34 @@ main > section:first-child {
     padding:5px;
     text-align: center;
     display: none;
+}
+
+
+section .search-area {
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+}
+
+section .search-area input {
+    width: calc(100% - 50px);
+    padding: 8px;
+    background-color: #eee;
+    border: none;
+    border-radius: 2px;
+    box-shadow: none;
+    outline: none;
+}
+
+section .search-area .button {
+    position: absolute;
+    right: 0;
+    padding: 8px 10px;
+    background: #FF5722;
+    color: #fff;
+    border-radius: 2px;
+    cursor: pointer;
 }
 
 
