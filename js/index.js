@@ -13,7 +13,7 @@ function generate_html_tmp(movie){
     let tmp = `            <div class="item">
     <a href="#">
         <div class="cover">
-            <img src="${movie.images.medium}" alt="">
+            <img src="http://img3.doubanio.com/f/movie/b6dc761f5e4cf04032faa969826986efbecd54bb/pics/movie/movie_default_small.png" data-src = "${movie.images.small}" alt="">
         </div>
         <div class="detail">
             <h2>${movie.title}</h2>
@@ -31,6 +31,8 @@ function generate_html_tmp(movie){
     return $(tmp)
 }
 
+
+
 class Top250{
     constructor(){
         this.$container = $('#top250')
@@ -43,6 +45,7 @@ class Top250{
         console.log("init top250")
         this.bind()
         this.start()
+        
     }
     
     bind(){
@@ -113,6 +116,9 @@ class Top250{
              let $node = generate_html_tmp(movie)
              this.$container.append($node)
         })
+        console.log("render 结束")
+        lazy_load()
+        
     }
 }
 
@@ -230,6 +236,7 @@ class Search{
              let $node = generate_html_tmp(movie)
              this.$container.append($node)
         })
+        lazy_load()
     }
 }
 
@@ -262,3 +269,28 @@ class App{
 }
 
 new App().init()
+
+function lazy_load(){
+    $('.cover img').not('[data-isLoaded]').each(function(){
+        if( $('main').height()+$('main').scrollTop() > $(this).offset().top ){
+            $(this).attr('src',$(this).attr('data-src'))
+            $(this).attr('data-isLoaded',1)
+        }
+    })
+}
+
+
+
+//图片懒加载
+let time_id = null
+$('main').on('scroll', function(){
+    if(time_id){
+        clearTimeout(time_id)
+    }
+    time_id = setTimeout(function(){
+        lazy_load()
+    },500)
+      
+  })
+
+
