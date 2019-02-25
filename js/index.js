@@ -49,15 +49,20 @@ class Top250{
         console.log("开始绑定事件")
         let $main = this.$container.parents('main')
         $main.scroll(()=>{
-            if(this.clock){
-                clearTimeout(this.clock)
-            }
-            this.clock = setTimeout(()=>{
-                if(this.$container.height() - 50 <= $main.height()+$main.scrollTop()){
-                    console.log("滚动到底部，发起新的请求")
-                    this.start()
+            if(this.$container.parent().css('display') === 'none'){
+                return
+            }else{
+                if(this.clock){
+                    clearTimeout(this.clock)
                 }
-            },300)
+                this.clock = setTimeout(()=>{
+                    if(this.$container.height() - 50 <= $main.height()+$main.scrollTop()){
+                        console.log("滚动到底部，发起新的请求")
+                        this.start()
+                    }
+                },300)
+            }
+            
             
         })        
 
