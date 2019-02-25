@@ -31,6 +31,15 @@ function generate_html_tmp(movie){
     return $(tmp)
 }
 
+function lazy_load(){
+    // 懒加载
+    $('.cover img').not('[data-isLoaded]').each(function(){
+        if( $('main').height()+$('main').scrollTop() > $(this).offset().top ){
+            $(this).attr('src',$(this).attr('data-src'))
+            $(this).attr('data-isLoaded',1)
+        }
+    })
+}
 
 
 class Top250{
@@ -39,6 +48,7 @@ class Top250{
         this.is_lodding = false //
         this.moive_index = 0
         this.clock = null
+        this.lazy_load_time_id = null
     }
     
     init(){
@@ -53,7 +63,7 @@ class Top250{
         let $main = this.$container.parents('main')
         $main.scroll(()=>{
             if(this.$container.parent().css('display') === 'none'){
-                return
+                
             }else{
                 if(this.clock){
                     clearTimeout(this.clock)
@@ -65,6 +75,13 @@ class Top250{
                     }
                 },300)
             }
+
+            if(this.lazy_load_time_id){
+                clearTimeout(this.lazy_load_time_id)
+            }
+            this.lazy_load_time_id = setTimeout(function(){
+                lazy_load()
+            },500)
             
             
         })        
@@ -270,27 +287,9 @@ class App{
 
 new App().init()
 
-function lazy_load(){
-    $('.cover img').not('[data-isLoaded]').each(function(){
-        if( $('main').height()+$('main').scrollTop() > $(this).offset().top ){
-            $(this).attr('src',$(this).attr('data-src'))
-            $(this).attr('data-isLoaded',1)
-        }
-    })
-}
 
 
 
-//图片懒加载
-let time_id = null
-$('main').on('scroll', function(){
-    if(time_id){
-        clearTimeout(time_id)
-    }
-    time_id = setTimeout(function(){
-        lazy_load()
-    },500)
-      
-  })
+
 
 
