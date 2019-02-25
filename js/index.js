@@ -142,17 +142,33 @@ class Top250{
 class Us{
     constructor(){
         this.$container = $('#us')
+        this.col_height_arr = []
+        this.img_width = $('.waterfall img').outerWidth(true)
+        this.col_Count =  Math.floor( $('.waterfall').width()/this.img_width )
+        for(let i = 0;i < this.col_Count;i++){
+            this.col_height_arr[i] = 0
+        }
+        console.log(this.col_height_arr)
     }
     
     init(){
         console.log("init us")
         this.bind()
-        this.start()
+        
     }
     
     bind(){
-
+        let _this = this
+        $('.waterfall img').on('load',function(){
+            // _this.layout($(this))
+            console.log(this)
+        })
     }
+
+    layout($node){
+        
+    }
+
     start(){
         this.getData((data)=>{
             this.render(data)
@@ -268,7 +284,7 @@ class App{
         // 初始化
         this.bind()
         new Top250().init()
-        new Us().init()
+        // new Us().init()
         new Search().init()
         
     }
@@ -289,7 +305,65 @@ new App().init()
 
 
 
+$('footer>div').eq(1).click(()=>{
+    
+    getData(render)
+    
+    
+})
 
+
+function getData(fn){
+    //获取页面数据
+
+    $.ajax({
+        url:'//api.douban.com/v2/movie/us_box',
+        type:'GET',
+        dataType:'jsonp',
+        
+        
+    }).done((res)=>{
+        console.log('请求US电影数据成功:')
+        fn(res)
+        console.log(res)
+    }).fail((res)=>{
+        console.log('请求电影数据失败: ')
+        console.log(res)    
+    })
+}
+
+function render(data){
+    let height_arr = [70,80,90,120]
+    data.subjects.forEach((movie)=>{
+         movie = movie.subject
+
+        //  let tmp = `<img src="http://img3.doubanio.com/f/movie/b6dc761f5e4cf04032faa969826986efbecd54bb/pics/movie/movie_default_small.png" data-src = "${movie.images.small}" alt="">`
+         let tmp = `<img src="${movie.images.small}" data-src = "${movie.images.small}" alt="">`
+         let $elemnet = $(tmp)
+         $elemnet.css('height',height_arr[Math.floor(Math.random()*4)])
+         $('.waterfall').append($elemnet)
+    })
+    layout()
+}
+
+function layout(){
+    let colHeightArray = []
+    let imgWidth = $('.waterfall img').outerWidth(true)
+    let colCount =  Math.floor($('.waterfall').width()/imgWidth)
+    for(let i=0; i<colCount; i++){
+        colHeightArray[i] = 0
+    }
+    console.log(`${colHeightArray} ${imgWidth} ${colCount}`)
+    $('.waterfall img').each(function(){
+        let min_value = Math.min(...colHeightArray)
+        let min_index = colHeightArray.indexOf(min_value)
+        $(this).css({
+            left:min_index*imgWidth,
+            top:min_value
+        })
+        colHeightArray[min_index] += $(this).outerHeight(true)
+    })
+}
 
 
 

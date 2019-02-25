@@ -107,6 +107,16 @@ section .search-area .button {
     cursor: pointer;
 }
 
+section #us {
+    position: relative;
+}
+
+section #us img {
+    width:80px;
+    margin: 2px;
+    position: absolute;
+}
+
 
 @keyframes rotate {
     0% {
