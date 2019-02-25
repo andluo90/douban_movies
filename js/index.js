@@ -343,8 +343,8 @@ function render(data){
     data.subjects.forEach((movie)=>{
          movie = movie.subject
 
-        //  let tmp = `<img src="http://img3.doubanio.com/f/movie/b6dc761f5e4cf04032faa969826986efbecd54bb/pics/movie/movie_default_small.png" data-src = "${movie.images.small}" alt="">`
-         let tmp = `<img src="${movie.images.small}" data-src = "${movie.images.small}" alt="">`
+         let tmp = `<img src="http://img3.doubanio.com/f/movie/b6dc761f5e4cf04032faa969826986efbecd54bb/pics/movie/movie_default_small.png" data-src = "${movie.images.small}" alt="">`
+        //  let tmp = `<img src="${movie.images.small}" data-src = "${movie.images.small}" alt="">`
          let $elemnet = $(tmp)
          $elemnet.css('height',height_arr[Math.floor(Math.random()*4)])
          $('.waterfall').append($elemnet)
@@ -369,6 +369,13 @@ function layout(){
             top:min_value
         })
         colHeightArray[min_index] += $(this).outerHeight(true)
+    })
+
+    $('.waterfall img').not('[data-isLoaded]').each(function(){
+        if( $('main').height()+$('main').scrollTop() > $(this).offset().top ){
+            $(this).attr('src',$(this).attr('data-src'))
+            $(this).attr('data-isLoaded',1)
+        }
     })
 }
 
