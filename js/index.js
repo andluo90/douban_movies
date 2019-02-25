@@ -307,7 +307,9 @@ new App().init()
 
 $('footer>div').eq(1).click(()=>{
     
-    getData(render)
+    if($('.waterfall img').length === 0){
+        getData(render)
+    }
     
     
 })
@@ -315,6 +317,7 @@ $('footer>div').eq(1).click(()=>{
 
 function getData(fn){
     //获取页面数据
+    $('.waterfall').parent().find('.loading').show()
 
     $.ajax({
         url:'//api.douban.com/v2/movie/us_box',
@@ -329,6 +332,9 @@ function getData(fn){
     }).fail((res)=>{
         console.log('请求电影数据失败: ')
         console.log(res)    
+    }).always(()=>{
+        $('.waterfall').parent().find('.loading').hide()
+
     })
 }
 
@@ -347,6 +353,7 @@ function render(data){
 }
 
 function layout(){
+    //瀑布流布局
     let colHeightArray = []
     let imgWidth = $('.waterfall img').outerWidth(true)
     let colCount =  Math.floor($('.waterfall').width()/imgWidth)
