@@ -218,6 +218,7 @@ class Us{
 class Search{
     constructor(){
         this.$element = $('#search')
+        this.$input = $('#search input')
         this.$container = $('.search-reslut .container')
     }
     
@@ -236,6 +237,19 @@ class Search{
             this.getData((data)=>{
                 this.render(data)
             })
+        })
+
+        // 绑定确认事件
+        let _this = this
+        this.$input.on('keypress',function(e){
+            let key_code = e.keyCode;
+            _this.keyword = $(this).val();
+            if(key_code === 13){
+                _this.$container.empty()
+                _this.getData((data)=>{
+                    _this.render(data)
+                }) 
+            }
         })
             
     }
