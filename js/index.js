@@ -320,7 +320,8 @@ function getData(fn){
     $('.waterfall').parent().find('.loading').show()
 
     $.ajax({
-        url:'//api.douban.com/v2/movie/us_box',
+        // url:'//api.douban.com/v2/movie/us_box',
+        url:'//api.douban.com/v2/movie/in_theaters',
         type:'GET',
         dataType:'jsonp',
         
@@ -341,7 +342,7 @@ function getData(fn){
 function render(data){
     let height_arr = [70,80,90,120]
     data.subjects.forEach((movie)=>{
-         movie = movie.subject
+        //  movie = movie.subject
 
          let tmp = `<img src="http://img3.doubanio.com/f/movie/b6dc761f5e4cf04032faa969826986efbecd54bb/pics/movie/movie_default_small.png" data-src = "${movie.images.small}" alt="">`
         //  let tmp = `<img src="${movie.images.small}" data-src = "${movie.images.small}" alt="">`
