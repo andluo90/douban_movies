@@ -1,3 +1,14 @@
+{
+    // // 修复IOS上VH的bug
+    let iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true:false;
+    if(iOS){
+        let main_height = $(window).height() - 50
+        $('main').css({height:main_height})
+        console.log("IOS上main的height已重置")
+    }
+}
+
+
 function generate_html_tmp(movie){
     // 处理电影json格式数据，生成html模板字符串
     let {casts,directors} = movie
