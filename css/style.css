@@ -111,11 +111,37 @@ section #us {
     position: relative;
 }
 
-section #us img {
+/* section #us img {
     width:80px;
     margin: 2px;
     position: absolute;
+}  */
+
+/* 添加评分 */
+section #us .img-wrap {
+    width:80px;
+    margin: 2px;
+    display: inline-block;
+    position: absolute;
 }
+
+section #us img {
+    width:80px;
+}  
+section #us .score {
+    font-size: .9em;
+    font-weight: 300;
+    right: 2px;
+    bottom: 4px;
+    color: white;
+    position: absolute;
+    background: #ff5722;
+    border-radius: 50%;
+    opacity: .8;
+    padding: 4px;
+}
+
+/* 添加评分 结束*/
 
 
 @keyframes rotate {

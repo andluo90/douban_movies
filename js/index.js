@@ -344,10 +344,15 @@ function render(data){
     data.subjects.forEach((movie)=>{
         //  movie = movie.subject
 
-         let tmp = `<img src="http://img3.doubanio.com/f/movie/b6dc761f5e4cf04032faa969826986efbecd54bb/pics/movie/movie_default_small.png" data-src = "${movie.images.small}" alt="">`
-        //  let tmp = `<img src="${movie.images.small}" data-src = "${movie.images.small}" alt="">`
+         let tmp = `
+         <div class="img-wrap">
+            <img src="http://img3.doubanio.com/f/movie/b6dc761f5e4cf04032faa969826986efbecd54bb/pics/movie/movie_default_small.png" data-src = "${movie.images.small}" alt="">
+            <span class="score">${Number(movie.rating.average).toFixed(1)}<span>
+         </div>
+         `
+         
          let $elemnet = $(tmp)
-         $elemnet.css('height',height_arr[Math.floor(Math.random()*4)])
+         $elemnet.find('img').css('height',height_arr[Math.floor(Math.random()*4)])
          $('.waterfall').append($elemnet)
     })
     layout()
@@ -356,13 +361,15 @@ function render(data){
 function layout(){
     //瀑布流布局
     let colHeightArray = []
-    let imgWidth = $('.waterfall img').outerWidth(true)
+    // let imgWidth = $('.waterfall img').outerWidth(true)
+    let imgWidth = $('.waterfall .img-wrap').outerWidth(true)
+
     let colCount =  Math.floor($('.waterfall').width()/imgWidth)
     for(let i=0; i<colCount; i++){
         colHeightArray[i] = 0
     }
     console.log(`${colHeightArray} ${imgWidth} ${colCount}`)
-    $('.waterfall img').each(function(){
+    $('.waterfall .img-wrap').each(function(){
         let min_value = Math.min(...colHeightArray)
         let min_index = colHeightArray.indexOf(min_value)
         $(this).css({
@@ -381,10 +388,10 @@ function layout(){
     })
 
     //居中对齐
-    let total_width = $('.waterfall img').parents('section').outerWidth(true)
-    let imgs_width = $('.waterfall img').eq(0).outerWidth(true) * colCount
+    let total_width = $('.waterfall .img-wrap').parents('section').outerWidth(true)
+    let imgs_width = $('.waterfall .img-wrap').eq(0).outerWidth(true) * colCount
     let padding = Math.floor( (total_width - imgs_width)/2 )
-    $('.waterfall img').parents('section').css({'padding-left':padding,'padding-top':padding})
+    $('.waterfall .img-wrap').parents('section').css({'padding-left':padding,'padding-top':padding})
     console.log(`padding-left is ${padding}`)
 }
 
