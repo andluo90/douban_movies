@@ -372,12 +372,20 @@ function layout(){
         colHeightArray[min_index] += $(this).outerHeight(true)
     })
 
+    //懒加载图片
     $('.waterfall img').not('[data-isLoaded]').each(function(){
         if( $('main').height()+$('main').scrollTop() > $(this).offset().top ){
             $(this).attr('src',$(this).attr('data-src'))
             $(this).attr('data-isLoaded',1)
         }
     })
+
+    //居中对齐
+    let total_width = $('.waterfall img').parents('section').outerWidth(true)
+    let imgs_width = $('.waterfall img').eq(0).outerWidth(true) * colCount
+    let padding = Math.floor( (total_width - imgs_width)/2 )
+    $('.waterfall img').parents('section').css({'padding-left':padding,'padding-top':padding})
+    console.log(`padding-left is ${padding}`)
 }
 
 
