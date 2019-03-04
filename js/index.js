@@ -8,6 +8,21 @@
     }
 }
 
+let Event_hub= {
+    events : {},
+    on(type,fn){
+        if(this.events[type] ===  undefined){
+            this.events[type] = []
+        }
+        this.events[type].push(fn)
+    },
+    emit(type,data){
+        this.events[type].forEach((fn)=>{
+            fn.call(null,data)
+        })
+    }
+}
+
 
 function generate_html_tmp(movie){
     // 处理电影json格式数据，生成html模板字符串
@@ -21,7 +36,7 @@ function generate_html_tmp(movie){
         director_name_arr.push(director.name)
     })
 
-    let tmp = `            <div class="item">
+    let tmp = `            <div class="item" data-movie-id=${movie.id}>
     <a href="#">
         <div class="cover">
             <img src="http://img3.doubanio.com/f/movie/b6dc761f5e4cf04032faa969826986efbecd54bb/pics/movie/movie_default_small.png" data-src = "${movie.images.small}" alt="">
@@ -34,6 +49,7 @@ function generate_html_tmp(movie){
             <div class="extra">${movie.year} / ${movie.genres.join('、')}</div>
             <div class="extra">导演：${director_name_arr.join('、')}</div>
             <div class="extra">主演：${cast_name_arr.join('、')}</div>
+            <span class="iconfont icon-xihuan"></span>
 
         </div>
     </a>
@@ -60,6 +76,7 @@ class Top250{
         this.moive_index = 0
         this.clock = null
         this.lazy_load_time_id = null
+        this.event_hub = Event_hub
     }
     
     init(){
@@ -70,8 +87,10 @@ class Top250{
     }
     
     bind(){
+        let _this = this
         console.log("开始绑定事件")
         let $main = this.$container.parents('main')
+        // 滚动事件
         $main.scroll(()=>{
             if(this.$container.parent().css('display') === 'none'){
                 
@@ -95,7 +114,24 @@ class Top250{
             },500)
             
             
-        })        
+        })  
+
+        //收藏
+        this.$container.on('click','.icon-xihuan',function(e){
+            console.log(e.currentTarget)
+            let movie_item = $(this).parents('.item')
+            let movie_html_str = movie_item.wrap('<p/>').parent().html()
+            let movie_id = movie_item.data('movieId')
+            console.log(`movie id is ${movie_id}`)
+            if( $(this).hasClass('active') ){
+                $(this).removeClass('active')
+            }else{
+                _this.event_hub.emit('like',{id:movie_id,html:movie_html_str})
+                $(this).addClass('active')
+            }
+        })
+        
+        
 
     }
     start(){
@@ -299,34 +335,97 @@ class Search{
 }
 
 
-class App{
+class Favorite {
     constructor(){
+        
+        this.$container = $('#fav')
+        this.local_storage = localStorage
+        this.data = this.local_storage.getItem('douban_movies')
+        this.event_hub = Event_hub
+    }
+    init(){
+        console.log("初始化")
+        if(this.data === null){
+            this.data = []
+        }else{
+            this.data = JSON.parse(this.data)
+        }
+        this.bind()
+        this.render()
+    }
+    bind(){
+        let _this = this
+        console.log("绑定事件")
+        this.event_hub.on('like',function(data){
+            console.log(`我监听到了like事件...`)
+            console.log(data)
+            _this.data.unshift(data)
+            console.log(_this.data)
+            _this.local_storage.setItem('douban_movies',JSON.stringify(_this.data))
+        })
+
+    }
+    
+    render(){
+        this.$container.empty()
+        console.log("页面渲染")
+        if(this.data.length === 0){
+            console.log("暂无收藏...")
+        }else{
+            let movie_arr = this.data
+            movie_arr.forEach((movie)=>{
+                this.$container.append($(movie.html))
+            })
+        }
+        
+    }
+}
+
+
+
+class App{
+    constructor({top250,us,fav}){
         this.$tabs = $('footer>div') //tab按钮
         this.panels = $('section')
+        this.top250 = top250
+        this.us = us
+        this.fav = fav
         
     }
     init(){
         // 初始化
         this.bind()
-        new Top250().init()
-        // new Us().init()
-        new Search().init()
+        this.top250.init()
+        // this.us.init()
+        // new Search().init()
+        this.fav.init()
         
     }
     bind(){
+        // 绑定事件
+
         let _this = this
         this.$tabs.click(function(){
             let index = $(this).index()
             _this.panels.hide().eq(index).fadeIn()
             $(this).addClass('active').siblings().removeClass('active')
+            if ($(this).data('id') === 'xihuan'){
+                _this.fav.render()
+            }
+            
         })
-        // 绑定事件
 
     }
 
 }
 
-new App().init()
+let app = new App(
+    {
+        top250:new Top250(),
+        us:new Us(),
+        fav:new Favorite()
+    }
+    ).init()
 
 
 

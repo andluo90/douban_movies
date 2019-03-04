@@ -140,6 +140,23 @@ section #us .score {
     padding: 4px;
 }
 
+/* 添加收藏 */
+section .icon-xihuan {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-70%);
+    font-size: 2.1em;
+}
+
+section .icon-xihuan.active {
+    color:red;
+}
+
+section .item .detail {
+    position: relative;
+}
+
 /* 添加评分 结束*/
 
 
