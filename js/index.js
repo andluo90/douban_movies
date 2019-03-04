@@ -24,8 +24,17 @@ let Event_hub= {
 }
 
 
-function generate_html_tmp(movie){
+function generate_html_tmp(movie,local_data){
     // 处理电影json格式数据，生成html模板字符串
+    let status = ""
+    if(local_data !==  null){
+        JSON.parse(local_data).forEach((m)=>{
+            if(movie.id === m.id+''){
+                console.log(`相等的id ${m.id}`)
+                status = 'active'
+            }
+        })
+    }
     let {casts,directors} = movie
     let cast_name_arr = []
     let director_name_arr = []
@@ -49,7 +58,7 @@ function generate_html_tmp(movie){
             <div class="extra">${movie.year} / ${movie.genres.join('、')}</div>
             <div class="extra">导演：${director_name_arr.join('、')}</div>
             <div class="extra">主演：${cast_name_arr.join('、')}</div>
-            <span class="iconfont icon-xihuan"></span>
+            <span class="iconfont icon-xihuan ${status}"></span>
 
         </div>
     </a>
@@ -78,17 +87,14 @@ class Top250{
         this.lazy_load_time_id = null
         this.event_hub = Event_hub
 
-        this.data = this.local_storage.getItem('douban_movies')
+        this.data = localStorage.getItem('douban_movies')
 
     }
     
     init(){
         console.log("init top250")
 
-        if(this.data === null){
-            
-        }
-
+        
         this.bind()
         this.start()
         
@@ -138,6 +144,12 @@ class Top250{
                 _this.event_hub.emit('like',{id:movie_id,html:movie_html_str})
             }
         })
+
+        //收藏页面取消收藏事件
+        this.event_hub.on('fav_unlike',function(movie_id){
+            _this.$container.find(`[data-movie-id=${movie_id}] .icon-xihuan`).removeClass('active')
+            console.log(`收藏页面取消收藏事件 成功`)
+        })
         
         
 
@@ -185,7 +197,7 @@ class Top250{
 
     render(data){
         data.subjects.forEach((movie)=>{
-             let $node = generate_html_tmp(movie)
+             let $node = generate_html_tmp(movie,this.data)
              this.$container.append($node)
         })
         console.log("render 结束")
@@ -369,6 +381,7 @@ class Favorite {
             let item = $(this).parents('.item')
             let movie_id = item.data('movieId')
             _this.remove_movie(movie_id)
+            _this.event_hub.emit('fav_unlike',movie_id)
         })
 
         this.event_hub.on('like',function(data){
