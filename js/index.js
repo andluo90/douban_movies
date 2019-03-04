@@ -329,7 +329,7 @@ class Search{
             if(key_code === 13){
                 _this.$container.empty()
                 _this.getData((data)=>{
-                    _this.render(data,this.data())
+                    _this.render(data,_this.data())
                 }) 
             }
         })
@@ -441,6 +441,8 @@ class Favorite {
         this.$container.empty()
         if(this.data.length === 0){
             console.log("暂无收藏...")
+            this.$container.append($('<span class="no-data">暂无收藏哦...</span>'))
+
         }else{
             let movie_arr = this.data
             movie_arr.forEach((movie)=>{

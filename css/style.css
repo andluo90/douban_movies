@@ -153,6 +153,17 @@ section .icon-xihuan.active {
     color:red;
 }
 
+section .no-data {
+    position: absolute;
+    font-size: 1.3em;
+    color: grey;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-250%);
+}
+
+/* 添加收藏结束 */
+
 section .item .detail {
     position: relative;
 }
