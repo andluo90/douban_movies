@@ -77,10 +77,18 @@ class Top250{
         this.clock = null
         this.lazy_load_time_id = null
         this.event_hub = Event_hub
+
+        this.data = this.local_storage.getItem('douban_movies')
+
     }
     
     init(){
         console.log("init top250")
+
+        if(this.data === null){
+            
+        }
+
         this.bind()
         this.start()
         
@@ -118,16 +126,16 @@ class Top250{
 
         //收藏
         this.$container.on('click','.icon-xihuan',function(e){
-            console.log(e.currentTarget)
             let movie_item = $(this).parents('.item')
-            let movie_html_str = movie_item.wrap('<p/>').parent().html()
             let movie_id = movie_item.data('movieId')
-            console.log(`movie id is ${movie_id}`)
             if( $(this).hasClass('active') ){
                 $(this).removeClass('active')
+                _this.event_hub.emit('unlike',movie_id)
+                
             }else{
-                _this.event_hub.emit('like',{id:movie_id,html:movie_html_str})
                 $(this).addClass('active')
+                let movie_html_str = movie_item.wrap('<p/>').parent().html()
+                _this.event_hub.emit('like',{id:movie_id,html:movie_html_str})
             }
         })
         
@@ -355,15 +363,40 @@ class Favorite {
     }
     bind(){
         let _this = this
-        console.log("绑定事件")
+
+        this.$container.on('click','.icon-xihuan',function(){
+            console.log("取消喜欢...")
+            let item = $(this).parents('.item')
+            let movie_id = item.data('movieId')
+            _this.remove_movie(movie_id)
+        })
+
         this.event_hub.on('like',function(data){
             console.log(`我监听到了like事件...`)
-            console.log(data)
             _this.data.unshift(data)
-            console.log(_this.data)
             _this.local_storage.setItem('douban_movies',JSON.stringify(_this.data))
         })
 
+        this.event_hub.on('unlike',function(id){
+            console.log(`我监听到了unlike事件...`)
+            _this.remove_movie(id)
+
+        })
+
+    }
+
+    remove_movie(id){
+        let movie_index = null;
+            for(let [index,movie] of this.data.entries()){
+                console.log(`${movie.id},${id}`)
+                if(movie.id === id){
+                    movie_index = index
+                    break;
+                }
+            }
+        this.data.splice(movie_index,1)
+        this.local_storage.setItem('douban_movies',JSON.stringify(this.data))
+        this.render()
     }
     
     render(){
