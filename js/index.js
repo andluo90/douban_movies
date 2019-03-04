@@ -271,11 +271,14 @@ class Us{
     }
 }
 
+
 class Search{
     constructor(){
         this.$element = $('#search')
         this.$input = $('#search input')
         this.$container = $('.search-reslut .container')
+        this.data = localStorage.getItem("douban_movies")
+        this.event_hub = Event_hub
     }
     
     init(){
@@ -287,23 +290,44 @@ class Search{
     }
     
     bind(){
+
+        let _this = this
+
         this.$element.find('.button').click(()=>{
             this.keyword = this.$element.find('input').val()
             this.$container.empty()
             this.getData((data)=>{
-                this.render(data)
+                this.render(data,this.data)
             })
         })
 
+        //绑定收藏事件
+        this.$container.on('click','.icon-xihuan',function(){
+            let item = $(this).parents('.item')
+            let movie_id = item.data('movieId')
+            if($(this).hasClass('active')){
+                console.log("收藏中....")
+                $(this).removeClass("active")
+                _this.event_hub.emit('unlike',movie_id)
+                
+            }else{
+                console.log("没有收藏...")
+                $(this).addClass("active")
+                let movie_html_str = item.wrap('<p/>').parent().html()
+                _this.event_hub.emit('like',{id:movie_id,html:movie_html_str})
+
+
+            }
+        })
+
         // 绑定确认事件
-        let _this = this
         this.$input.on('keypress',function(e){
             let key_code = e.keyCode;
             _this.keyword = $(this).val();
             if(key_code === 13){
                 _this.$container.empty()
                 _this.getData((data)=>{
-                    _this.render(data)
+                    _this.render(data,this.data)
                 }) 
             }
         })
@@ -345,9 +369,9 @@ class Search{
         }
     }
 
-    render(data){
+    render(data,local_data){
         data.subjects.forEach((movie)=>{
-             let $node = generate_html_tmp(movie)
+             let $node = generate_html_tmp(movie,local_data)
              this.$container.append($node)
         })
         lazy_load()
@@ -430,20 +454,21 @@ class Favorite {
 
 
 class App{
-    constructor({top250,us,fav}){
+    constructor({top250,us,search,fav}){
         this.$tabs = $('footer>div') //tab按钮
         this.panels = $('section')
         this.top250 = top250
         this.us = us
+        this.search = search
         this.fav = fav
         
     }
     init(){
         // 初始化
         this.bind()
-        this.top250.init()
+        // this.top250.init()
         // this.us.init()
-        // new Search().init()
+        this.search.init()
         this.fav.init()
         
     }
@@ -469,6 +494,7 @@ let app = new App(
     {
         top250:new Top250(),
         us:new Us(),
+        search:new Search(),
         fav:new Favorite()
     }
     ).init()
