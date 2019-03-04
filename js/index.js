@@ -215,7 +215,6 @@ class Us{
         for(let i = 0;i < this.col_Count;i++){
             this.col_height_arr[i] = 0
         }
-        console.log(this.col_height_arr)
     }
     
     init(){
@@ -227,8 +226,6 @@ class Us{
     bind(){
         let _this = this
         $('.waterfall img').on('load',function(){
-            // _this.layout($(this))
-            console.log(this)
         })
     }
 
@@ -277,7 +274,7 @@ class Search{
         this.$element = $('#search')
         this.$input = $('#search input')
         this.$container = $('.search-reslut .container')
-        this.data = localStorage.getItem("douban_movies")
+        this.data = ()=>localStorage.getItem("douban_movies")
         this.event_hub = Event_hub
     }
     
@@ -297,7 +294,7 @@ class Search{
             this.keyword = this.$element.find('input').val()
             this.$container.empty()
             this.getData((data)=>{
-                this.render(data,this.data)
+                this.render(data,this.data())
             })
         })
 
@@ -320,6 +317,11 @@ class Search{
             }
         })
 
+        this.event_hub.on('fav_unlike',function(movie_id){
+            _this.$container.find(`[data-movie-id=${movie_id}] .icon-xihuan`).removeClass('active')
+            console.log(`收藏页面取消收藏事件 成功`)
+        })
+
         // 绑定确认事件
         this.$input.on('keypress',function(e){
             let key_code = e.keyCode;
@@ -327,7 +329,7 @@ class Search{
             if(key_code === 13){
                 _this.$container.empty()
                 _this.getData((data)=>{
-                    _this.render(data,this.data)
+                    _this.render(data,this.data())
                 }) 
             }
         })
@@ -425,7 +427,6 @@ class Favorite {
     remove_movie(id){
         let movie_index = null;
             for(let [index,movie] of this.data.entries()){
-                console.log(`${movie.id},${id}`)
                 if(movie.id === id){
                     movie_index = index
                     break;
@@ -438,7 +439,6 @@ class Favorite {
     
     render(){
         this.$container.empty()
-        console.log("页面渲染")
         if(this.data.length === 0){
             console.log("暂无收藏...")
         }else{
@@ -466,7 +466,7 @@ class App{
     init(){
         // 初始化
         this.bind()
-        // this.top250.init()
+        this.top250.init()
         // this.us.init()
         this.search.init()
         this.fav.init()
@@ -523,7 +523,6 @@ function getData(fn){
         
         
     }).done((res)=>{
-        console.log('请求US电影数据成功:')
         fn(res)
         console.log(res)
     }).fail((res)=>{

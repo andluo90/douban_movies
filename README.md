@@ -2,10 +2,8 @@
 手机豆瓣电影-单页应用
 
 ### 技术栈
-1. 使用面向对象设计思想
-2. 使用JQuery
-3. 图片懒加载
-4. 瀑布流布局
+面向对象设计、JQuery、函数节流、懒加载、瀑布流、发布/订阅模式
+
 
 ### 预览链接
 [https://andluo90.github.io/douban_movies/index.html](https://andluo90.github.io/douban_movies/index.html)
