@@ -1,3 +1,10 @@
+import $ from 'jquery'
+import './css/style.css'
+
+console.log("eeee")
+
+console.log("This is test444...")
+
 {
     // // 修复IOS上VH的bug
     let iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true:false;
