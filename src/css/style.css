@@ -10,10 +10,15 @@ a {
     color:#333;
 }
 
+ul li {
+    list-style: none;
+}
+
 body {
     font-size: 12px;
     line-height: 1.2;
     background-color:#fff;
+    font-family: "Helvetica Neue",Helvetica,Roboto,Arial,sans-serif;
 }
 
 main {
@@ -200,3 +205,147 @@ footer>div>span {
     display: block;
     padding-top:5px;
 }
+
+/* 
+电影详情
+*/
+
+#detail {
+    background: rgba(0,0,0,0.4);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+#detail .movie_detail {
+    height: 100%;
+    margin: 30px 10px 50px 10px;
+    background: white;
+}
+
+#detail .card {
+    padding:0 15px;
+}
+
+#detail .subject {
+    display: flex;
+}
+
+#detail .left {
+    width: calc(100% - 100px);
+}
+
+#detail .right {
+    width: 100px;
+    height: 110px;
+    outline: 1px solid red;
+}
+
+#detail .channel_tags{
+    margin-bottom: 30px
+    
+}
+
+#detail h2 {
+    color: #aaa;
+    margin: 0 0 15px;
+    font-size: 15px;
+}
+
+#detail h1,#detail h2,#detail h3 {
+    font-wight:normal;
+}
+
+
+
+ 
+
+#detail h1 {
+    padding-top: 20px;
+    padding-bottom: 5px;
+    font-weight: 400;
+    color: rgb(17,17,17);
+}
+
+#detail .score {
+    color:rgb(73,73,73)
+}
+
+#detail .count {
+    color:rgb(170,170,170)
+}
+
+#detail .meta {
+    font-size: 14px;
+    color:rgb(73,73,73);
+    line-height: 22.4px;
+    padding-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    
+}
+
+#detail .channel_tag {
+    background-color: #effaf0;
+    border: 1px solid #42bd56;
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+#detail a {
+  color:#42bd56   
+}
+
+#detail .bd {
+    font-size: 15px;
+    color: #494949;
+    margin-bottom: 30px;
+}
+
+#detail .celebrities ul {
+    overflow: auto;
+    white-space:nowrap;
+}
+
+#detail .celebrities li {
+    display: inline-block;
+    width: 75px;
+    height:100px;
+}
+
+
+#detail .celebrities .poster {
+    height:100px;
+    outline: 1px solid pink;
+    
+}
+
+#detail .celebrities .name , #detail .celebrities .role {
+    margin-top:8px;
+    display: block;
+    text-align: center;
+}
+
+#detail .close {
+    margin:30px 0;
+    text-align: center;
+}
+
+#detail .close button {
+    color: #42bd56;
+    background-color: #effaf0;
+    border: 1px solid #42bd56;
+    font-size: 14px;
+    padding: 5px 16px;
+    border-radius: 15px;
+}
+
+
+
+
+

@@ -1,9 +1,6 @@
 import $ from 'jquery'
 import './css/style.css'
 
-console.log("eeee")
-
-console.log("This is test444...")
 
 {
     // // 修复IOS上VH的bug
@@ -85,6 +82,7 @@ function lazy_load(){
 }
 
 
+
 class Top250{
     constructor(){
         this.$container = $('#top250')
@@ -150,12 +148,21 @@ class Top250{
                 let movie_html_str = movie_item.wrap('<p/>').parent().html()
                 _this.event_hub.emit('like',{id:movie_id,html:movie_html_str})
             }
+            e.stopPropagation()
+
         })
 
         //收藏页面取消收藏事件
         this.event_hub.on('fav_unlike',function(movie_id){
             _this.$container.find(`[data-movie-id=${movie_id}] .icon-xihuan`).removeClass('active')
             console.log(`收藏页面取消收藏事件 成功`)
+        })
+
+        //查看详情
+        this.$container.on('click',":not('.icon-xihuan')",function(e){
+            console.log($(this))
+            console.log("查看详情成功...")
+            e.stopPropagation()
         })
         
         

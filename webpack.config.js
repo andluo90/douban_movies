@@ -4,9 +4,10 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 
 module.exports = {
-  entry: {
-      app:'./src/index.js',
-  },
+  context: path.resolve(__dirname, 'src'),
+
+  entry: {app:'./index.js'},
+
   mode:"production",
   devtool: 'inline-source-map',
   
@@ -21,7 +22,7 @@ module.exports = {
   },
 
   plugins:[
-    new HtmlWebpackPlugin({template: './src/index.html'}),
+    new HtmlWebpackPlugin({template: './index.html'}),
     new CleanWebpackPlugin()
   ],
 
