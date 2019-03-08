@@ -216,6 +216,7 @@ footer>div>span {
     left: 0;
     top: 0;
     width: 100%;
+    display: none;
 }
 
 #detail .movie_detail {

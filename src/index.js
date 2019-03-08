@@ -160,8 +160,7 @@ class Top250{
 
         //查看详情
         this.$container.on('click',":not('.icon-xihuan')",function(e){
-            console.log($(this))
-            console.log("查看详情成功...")
+            _this.event_hub.emit('show_detail','abc')
             e.stopPropagation()
         })
         
@@ -470,13 +469,14 @@ class Favorite {
 
 
 class App{
-    constructor({top250,us,search,fav}){
+    constructor({top250,us,search,fav,detail}){
         this.$tabs = $('footer>div') //tab按钮
         this.panels = $('section')
         this.top250 = top250
         this.us = us
         this.search = search
         this.fav = fav
+        this.detail = detail
         
     }
     init(){
@@ -486,6 +486,7 @@ class App{
         // this.us.init()
         this.search.init()
         this.fav.init()
+        this.detail.init()
         
     }
     bind(){
@@ -506,12 +507,42 @@ class App{
 
 }
 
+class Detail{
+    constructor(){
+        this.$container = $('#detail')
+        this.$close = this.$container.find('.close button')
+        this.event_hub = Event_hub
+    }
+
+    init(){
+        this.bind()
+    }
+
+    bind(){
+        this.$close.on('click',()=>{
+            console.log("关闭详情页...")
+            this.$container.fadeOut()
+        })
+
+        this.event_hub.on('show_detail',(movie_id)=>{
+            console.log(movie_id)
+            this.$container.fadeIn()
+
+
+        })
+        
+        
+    }   
+}
+
 let app = new App(
     {
         top250:new Top250(),
         us:new Us(),
         search:new Search(),
-        fav:new Favorite()
+        fav:new Favorite(),
+        detail:new Detail()
+        
     }
     ).init()
 
