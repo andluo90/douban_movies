@@ -502,8 +502,11 @@ class App{
 class Detail{
     constructor(){
         this.$container = $('#detail')
+        this.$height = $(window).height()
         this.event_hub = Event_hub
         this.data = null
+        
+        
     }
 
     init(){
@@ -589,7 +592,7 @@ class Detail{
         let meta = `${data.durations[0]+' / '+data.genres.join(' / ')+' / '+meta_directors+meta_casts+this.data.pubdates.join(' / ')}`
 
         let tmp = `
-        <div class="movie_detail">
+        <div class="movie_detail" style="height:${this.$height}px">
             <div class="card">
                 <h1>${data.title}</h1>
                 <div class="subject">

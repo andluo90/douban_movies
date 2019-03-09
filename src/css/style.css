@@ -222,12 +222,15 @@ footer>div>span {
 
 #detail .movie_detail {
     height: 100%;
-    margin: 30px 10px 50px 10px;
-    background: white;
+    /* margin: 30px 10px 0px 10px; */
+    background:white;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+
 }
 
 #detail .card {
-    padding:0 15px;
+    padding:0 18px;
 }
 
 #detail .subject {
