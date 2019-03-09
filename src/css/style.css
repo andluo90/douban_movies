@@ -67,6 +67,7 @@ main > section:first-child {
 
 .item .detail .score {
     color:#ff5722;
+    margin-right:8px;
 }
 
 .loading .iconfont {
@@ -240,7 +241,11 @@ footer>div>span {
 #detail .right {
     width: 100px;
     height: 110px;
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
+}
+
+#detail .right img {
+    width:100px;
 }
 
 #detail .channel_tags{
@@ -283,7 +288,7 @@ footer>div>span {
     line-height: 22.4px;
     padding-right: 20px;
     margin-top: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     
 }
 
@@ -316,13 +321,16 @@ footer>div>span {
 #detail .celebrities li {
     display: inline-block;
     width: 75px;
-    height:100px;
+    margin-right:8px;
 }
 
 
 #detail .celebrities .poster {
-    height:100px;
-    outline: 1px solid pink;
+    width: 100%;
+    height: 130px;
+    background-size: cover;
+    background-position: center;
+    /* outline: 1px solid pink; */
     
 }
 
