@@ -217,6 +217,7 @@ class Us{
     constructor(){
         this.$container = $('#us')
         this.col_height_arr = []
+        this.event_hub = Event_hub
         this.img_width = $('.waterfall img').outerWidth(true)
         this.col_Count =  Math.floor( $('.waterfall').width()/this.img_width )
         for(let i = 0;i < this.col_Count;i++){
@@ -231,7 +232,8 @@ class Us{
     
     bind(){
         let _this = this
-        $('.waterfall img').on('load',function(){
+        this.$container.on('click','.img-wrap',function(){
+            _this.event_hub.emit('show_detail',$(this).data('movieId'))
         })
     }
 
@@ -295,6 +297,10 @@ class Search{
 
         let _this = this
 
+        this.$container.on('click','.item',function(){
+            _this.event_hub.emit('show_detail',$(this).data('movieId'))
+        })
+
         this.$element.find('.button').click(()=>{
             this.keyword = this.$element.find('input').val()
             this.$container.empty()
@@ -304,7 +310,7 @@ class Search{
         })
 
         //绑定收藏事件
-        this.$container.on('click','.icon-xihuan',function(){
+        this.$container.on('click','.icon-xihuan',function(e){
             let item = $(this).parents('.item')
             let movie_id = item.data('movieId')
             if($(this).hasClass('active')){
@@ -320,6 +326,7 @@ class Search{
 
 
             }
+            e.stopPropagation()
         })
 
         this.event_hub.on('fav_unlike',function(movie_id){
@@ -407,12 +414,17 @@ class Favorite {
     bind(){
         let _this = this
 
-        this.$container.on('click','.icon-xihuan',function(){
+        this.$container.on('click','.icon-xihuan',function(e){
             console.log("取消喜欢...")
             let item = $(this).parents('.item')
             let movie_id = item.data('movieId')
             _this.remove_movie(movie_id)
             _this.event_hub.emit('fav_unlike',movie_id)
+            e.stopPropagation()
+        })
+
+        this.$container.on('click','.item',function(){
+            _this.event_hub.emit('show_detail',$(this).data('movieId'))
         })
 
         this.event_hub.on('like',function(data){
@@ -475,7 +487,7 @@ class App{
         // 初始化
         this.bind()
         this.top250.init()
-        // this.us.init()
+        this.us.init()
         this.search.init()
         this.fav.init()
         this.detail.init()
@@ -525,14 +537,7 @@ class Detail{
             this.get_data(url,()=>{
                 this.render()
             })
-
-            
-
-
-
         })
-        
-        
     }  
     
     get_data(url,render){
@@ -694,8 +699,8 @@ function render(data){
         //  movie = movie.subject
 
          let tmp = `
-         <div class="img-wrap">
-            <img src="http://img3.doubanio.com/f/movie/b6dc761f5e4cf04032faa969826986efbecd54bb/pics/movie/movie_default_small.png" data-src = "${movie.images.small}" alt="">
+         <div class="img-wrap" data-movie-id=${movie.id}>
+            <img src="http://img3.doubanio.com/f/movie/b6dc761f5e4cf04032faa969826986efbecd54bb/pics/movie/movie_default_small.png"  data-src = "${movie.images.small}" alt="">
             <span class="score">${Number(movie.rating.average).toFixed(1)}<span>
          </div>
          `

@@ -67,7 +67,7 @@ main > section:first-child {
 
 .item .detail .score {
     color:#ff5722;
-    margin-right:8px;
+    /* margin-right:8px; */
 }
 
 .loading .iconfont {
@@ -278,7 +278,8 @@ footer>div>span {
 }
 
 #detail .score {
-    color:rgb(73,73,73)
+    color:rgb(73,73,73);
+    margin-right:8px;
 }
 
 #detail .count {
@@ -312,8 +313,10 @@ footer>div>span {
 
 #detail .bd {
     font-size: 15px;
+    line-height: 22px;
     color: #494949;
     margin-bottom: 30px;
+    
 }
 
 #detail .celebrities ul {
