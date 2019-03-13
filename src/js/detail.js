@@ -4,6 +4,8 @@ class Detail{
     constructor(){
         this.$container = $('#detail')
         this.$height = $(window).height()
+        this.$width = $(window).width()
+        this.$left = this.$container.css({left:this.$width})
         this.event_hub = Event_hub
         this.data = null
         
@@ -17,7 +19,8 @@ class Detail{
     bind(){
         this.$container.on('click','.close button',()=>{
             console.log("关闭详情页...")
-            this.$container.fadeOut()
+            this.$container.css({left:this.$width})
+
         })
 
         this.event_hub.on('show_detail',(movie_id)=>{
@@ -129,7 +132,7 @@ class Detail{
         </div>
         `
         this.$container.empty()
-        this.$container.append(tmp).fadeIn()
+        this.$container.append(tmp).css({left:0})
         console.log("detail 渲染成功...")
 
 

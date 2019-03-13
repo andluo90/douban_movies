@@ -217,7 +217,11 @@ footer>div>span {
     left: 0;
     top: 0;
     width: 100%;
-    display: none;
+}
+
+
+#detail {
+    transition:.3s left ease-out;
 }
 
 #detail .movie_detail {
